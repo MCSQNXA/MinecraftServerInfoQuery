@@ -36,6 +36,7 @@ public class Demo {
             byte[] receive = new byte[packet.getLength() - 40];
             //取出有效数据
             System.arraycopy(packet.getData(), 40, receive, 0, packet.getLength() - 40);
+
             int k = 0;
             for (int i = 0; i < receive.length; i++) {
                 if (receive[i] == ';') {
