@@ -1,5 +1,3 @@
-import java.io.ByteArrayOutputStream;
-import java.lang.reflect.Array;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
@@ -8,7 +6,7 @@ import java.util.ArrayList;
 
 public class Demo {
 
-    public static ArrayList<String> look(String address, int port) {
+    public static ArrayList<String> query(String address, int port) {
         ArrayList<String> list = new ArrayList<>();
 
         try {
@@ -65,7 +63,7 @@ public class Demo {
     }
 
     public static void main(String[] args) {
-        ArrayList<String> list = Demo.look("mc.mcsq.cc", 19132);
+        ArrayList<String> list = Demo.query("mc.mcsq.cc", 19132);
 
         if (list.size() > 0) {
             StringBuilder builder = new StringBuilder();
@@ -76,6 +74,8 @@ public class Demo {
             builder.append("[服务器模式]:").append(list.get(8));
 
             System.out.println(builder);
+        } else {
+            System.out.println("网络错误");
         }
     }
 
