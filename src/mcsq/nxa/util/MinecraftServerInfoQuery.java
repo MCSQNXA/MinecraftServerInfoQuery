@@ -1,4 +1,4 @@
-package com.mcsqnxa.common;
+package mcsq.nxa.util;
 
 import org.json.JSONObject;
 
@@ -9,8 +9,6 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 
