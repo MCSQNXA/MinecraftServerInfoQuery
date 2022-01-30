@@ -25,15 +25,21 @@ public class MinecraftServerInfoQuery {
             Socket socket = new Socket(address, port);
             socket.setSoTimeout(8000);
 
+            ByteArrayOutputStream head = new ByteArrayOutputStream();
+            head.write(7 + address.getBytes().length);
+            head.write(new byte[]{0x00, (byte) 0xF5, 0x05});
+            head.write(address.getBytes().length);
+            head.write(address.getBytes());
+            head.write((port >> 0x08) & 0xff);
+            head.write((port >> 0x00) & 0xff);
+            head.write(new byte[]{0x01, 0x01, 0x00});
+
             OutputStream os = socket.getOutputStream();
-            os.write(new byte[]{0x10, 0x00, 0x6B, 0x0A});
-            os.write(address.getBytes());
-            os.write(new byte[]{(byte) 0xDD, 0x63, 0x01, 0x01, 0x00});
+            os.write(head.toByteArray());
             os.flush();
             socket.shutdownOutput();
 
             InputStream is = socket.getInputStream();
-            is.read();
             is.read();
             is.read();
             is.read();//去除头部无用字节数据
@@ -56,7 +62,7 @@ public class MinecraftServerInfoQuery {
                 map.put("服务器在线", new StringBuilder().append(players.getInt("online")).append("/").append(players.getLong("max")).toString());
                 map.put("服务器版本", version.getString("name"));
                 map.put("服务器协议", String.valueOf(version.getInt("protocol")));
-            } else if (data.has("with")) {
+            } else {
                 System.out.println(data);
             }
 
