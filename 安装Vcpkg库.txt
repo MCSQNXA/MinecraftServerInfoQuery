@@ -1,0 +1,2 @@
+vcpkg install jsoncpp:x64-windows    //默认安装x64系统使用的库
+vcpkg integrate install   //集成到全局

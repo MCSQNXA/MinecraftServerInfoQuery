@@ -9,7 +9,6 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.util.HashMap;
 
 
 public class MinecraftServerInfoQuery {
@@ -18,8 +17,8 @@ public class MinecraftServerInfoQuery {
      * @param port    爪哇版服务器端口
      * @return 查询成功，返回服务器信息
      */
-    public static HashMap<String, String> queryJava(String address, int port) {
-        HashMap<String, String> map = new HashMap<>();
+    public static String queryJava(String address, int port) {
+        StringBuilder info = new StringBuilder();
 
         try {
             Socket socket = new Socket(address, port);
@@ -51,6 +50,8 @@ public class MinecraftServerInfoQuery {
                 buff.write(len);
             }
 
+            socket.close();
+
             JSONObject data = new JSONObject(buff.toString());
 
             if (data.has("description")) {
@@ -58,20 +59,19 @@ public class MinecraftServerInfoQuery {
                 JSONObject players = data.getJSONObject("players");
                 JSONObject version = data.getJSONObject("version");
 
-                map.put("服务器名称", description.getString("text"));
-                map.put("服务器在线", new StringBuilder().append(players.getInt("online")).append("/").append(players.getLong("max")).toString());
-                map.put("服务器版本", version.getString("name"));
-                map.put("服务器协议", String.valueOf(version.getInt("protocol")));
+                info.append("服务器类型:Java").append("\n");
+                info.append("服务器名称:").append(description.getString("text")).append("\n");
+                info.append("服务器在线:").append(players.getInt("online")).append("/").append(players.getLong("max")).append("\n");
+                info.append("服务器版本:").append(version.getString("name")).append("\n");
+                info.append("服务器协议:").append(version.getInt("protocol"));
             } else {
-                System.out.println(data);
+                info.append(data);
             }
-
-            socket.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            info.append(e);
         }
 
-        return map;
+        return info.toString();
     }
 
     /**
@@ -79,8 +79,8 @@ public class MinecraftServerInfoQuery {
      * @param port    基岩版服务器端口
      * @return 查询成功，返回服务器信息
      */
-    public static HashMap<String, String> queryBedrock(String address, int port) {
-        HashMap<String, String> map = new HashMap<>();
+    public static String queryBedrock(String address, int port) {
+        StringBuilder info = new StringBuilder();
 
         try {
             byte[] data = new byte[]{
@@ -103,6 +103,10 @@ public class MinecraftServerInfoQuery {
             byte[] receive = new byte[packet.getLength() - 40];
             //取出有效数据
             System.arraycopy(packet.getData(), 40, receive, 0, packet.getLength() - 40);
+            //断开连接
+            socket.close();
+
+            info.append("服务器类型:Bedrock").append("\n");
 
             for (int i = 0, k = 0, c = 0; i < receive.length; i++) {
                 if (receive[i] == ';') {
@@ -117,42 +121,40 @@ public class MinecraftServerInfoQuery {
 
                     switch (c) {
                         case 1:
-                            map.put("服务器名称", new String(buffer));
+                            info.append("服务器名称:").append(new String(buffer)).append("\n");
                             break;
 
                         case 2:
-                            map.put("服务器协议", new String(buffer));
+                            info.append("服务器协议:").append(new String(buffer)).append("\n");
                             break;
 
                         case 3:
-                            map.put("服务器版本", new String(buffer));
+                            info.append("服务器版本:").append(new String(buffer)).append("\n");
                             break;
 
                         case 4:
-                            map.put("服务器在线", new String(buffer));
+                            info.append("服务器在线:").append(new String(buffer)).append("/");
                             break;
 
                         case 5:
-                            map.put("服务器在线", new StringBuilder().append(map.get("服务器在线")).append("/").append(new String(buffer)).toString());
+                            info.append(new String(buffer)).append("\n");
                             break;
 
                         case 7:
-                            map.put("服务器存档", new String(buffer));
+                            info.append("服务器存档:").append(new String(buffer)).append("\n");
                             break;
 
                         case 8:
-                            map.put("服务器模式", new String(buffer));
+                            info.append("服务器模式:").append(new String(buffer));
                             break;
                     }
                 }
             }
-
-            socket.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            info.append(e);
         }
 
-        return map;
+        return info.toString();
     }
 
 
