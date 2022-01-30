@@ -1,1 +1,2 @@
-# MinecraftServerInfoQuery
+# Minecraft服务器信息查询
+* 支持 爪哇版于基岩版服务器查询
