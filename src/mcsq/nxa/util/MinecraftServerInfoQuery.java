@@ -59,11 +59,11 @@ public class MinecraftServerInfoQuery {
                 JSONObject players = data.getJSONObject("players");
                 JSONObject version = data.getJSONObject("version");
 
-                info.append("服务器类型:Java").append("\n");
-                info.append("服务器名称:").append(description.getString("text")).append("\n");
-                info.append("服务器在线:").append(players.getInt("online")).append("/").append(players.getLong("max")).append("\n");
-                info.append("服务器版本:").append(version.getString("name")).append("\n");
-                info.append("服务器协议:").append(version.getInt("protocol"));
+                info.append("[服务器类型]:Java").append("\n");
+                info.append("[服务器名称]:").append(description.getString("text")).append("\n");
+                info.append("[服务器在线]:").append(players.getInt("online")).append("/").append(players.getLong("max")).append("\n");
+                info.append("[服务器版本]:").append(version.getString("name")).append("\n");
+                info.append("[服务器协议]:").append(version.getInt("protocol"));
             } else {
                 info.append(data);
             }
@@ -106,7 +106,7 @@ public class MinecraftServerInfoQuery {
             //断开连接
             socket.close();
 
-            info.append("服务器类型:Bedrock").append("\n");
+            info.append("[服务器类型]:Bedrock").append("\n");
 
             for (int i = 0, k = 0, c = 0; i < receive.length; i++) {
                 if (receive[i] == ';') {
@@ -121,19 +121,19 @@ public class MinecraftServerInfoQuery {
 
                     switch (c) {
                         case 1:
-                            info.append("服务器名称:").append(new String(buffer)).append("\n");
+                            info.append("[服务器名称]:").append(new String(buffer)).append("\n");
                             break;
 
                         case 2:
-                            info.append("服务器协议:").append(new String(buffer)).append("\n");
+                            info.append("[服务器协议]:").append(new String(buffer)).append("\n");
                             break;
 
                         case 3:
-                            info.append("服务器版本:").append(new String(buffer)).append("\n");
+                            info.append("[服务器版本]:").append(new String(buffer)).append("\n");
                             break;
 
                         case 4:
-                            info.append("服务器在线:").append(new String(buffer)).append("/");
+                            info.append("[服务器在线]:").append(new String(buffer)).append("/");
                             break;
 
                         case 5:
@@ -141,11 +141,11 @@ public class MinecraftServerInfoQuery {
                             break;
 
                         case 7:
-                            info.append("服务器存档:").append(new String(buffer)).append("\n");
+                            info.append("[服务器存档]:").append(new String(buffer)).append("\n");
                             break;
 
                         case 8:
-                            info.append("服务器模式:").append(new String(buffer));
+                            info.append("[服务器模式]:").append(new String(buffer));
                             break;
                     }
                 }

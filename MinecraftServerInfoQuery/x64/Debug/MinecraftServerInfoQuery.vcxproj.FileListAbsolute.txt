@@ -1,1 +1,0 @@
-D:\项目开发\MinecraftServerInfoQuery\MinecraftServerInfoQuery\x64\Debug\MinecraftServerInfoQuery.vcxproj.CopyComplete

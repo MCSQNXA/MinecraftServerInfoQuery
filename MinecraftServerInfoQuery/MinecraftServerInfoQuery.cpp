@@ -10,9 +10,6 @@
 
 #include <json/reader.h>
 
-#include <iostream>
-
-
 
 std::string MinecraftServerInfoQuery::queryJava(std::string ipv4, int port)
 {
@@ -83,13 +80,13 @@ std::string MinecraftServerInfoQuery::queryJava(std::string ipv4, int port)
 	}
 
 	std::string info;
-	info.append("服务器类型:Java").append("\n");
-	info.append("服务器名称:").append(data["description"]["text"].asString()).append("\n");
-	info.append("服务器在线:");
+	info.append("[服务器类型]:Java").append("\n");
+	info.append("[服务器名称]:").append(data["description"]["text"].asString()).append("\n");
+	info.append("[服务器在线]:");
 	info.append(std::to_string(data["players"]["online"].asInt())).append("/");
 	info.append(std::to_string(data["players"]["max"].asInt())).append("\n");
-	info.append("服务器版本:").append(data["version"]["name"].asString()).append("\n");
-	info.append("服务器协议:").append(std::to_string(data["version"]["protocol"].asInt()));
+	info.append("[服务器版本]:").append(data["version"]["name"].asString()).append("\n");
+	info.append("[服务器协议]:").append(std::to_string(data["version"]["protocol"].asInt()));
 
 	return info;
 }
@@ -141,7 +138,7 @@ std::string MinecraftServerInfoQuery::queryBedrock(std::string ipv4, int port)
 	}
 
 	std::string info;
-	info.append("服务器类型:Bedrock").append("\n");
+	info.append("[服务器类型]:Bedrock").append("\n");
 
 	for (int c = 0, l = 0, i = 0; i < stream._size; i++) {
 		if (stream._data[i] == ';') {
@@ -155,25 +152,25 @@ std::string MinecraftServerInfoQuery::queryBedrock(std::string ipv4, int port)
 			std::string string(temp, size); delete[] temp;
 
 			if (c == 0) {
-				info.append("服务器简介:").append(string).append("\n");
+				info.append("[服务器简介]:").append(string).append("\n");
 			}
 			else if (c == 1) {
-				info.append("服务器协议:").append(string).append("\n");
+				info.append("[服务器协议]:").append(string).append("\n");
 			}
 			else if (c == 2) {
-				info.append("服务器版本:").append(string).append("\n");
+				info.append("[服务器版本]:").append(string).append("\n");
 			}
 			else if (c == 3) {
-				info.append("服务器在线:").append(string).append("/");
+				info.append("[服务器在线]:").append(string).append("/");
 			}
 			else if (c == 4) {
 				info.append(string).append("\n");
 			}
 			else if (c == 6) {
-				info.append("服务器存档:").append(string).append("\n");
+				info.append("[服务器存档]:").append(string).append("\n");
 			}
 			else if (c == 7) {
-				info.append("服务器模式:").append(string);
+				info.append("[服务器模式]:").append(string);
 			}
 
 			l++; c++;
