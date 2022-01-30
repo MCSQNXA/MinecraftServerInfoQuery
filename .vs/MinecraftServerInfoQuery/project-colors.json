@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "7a0b1bef-b97f-47d2-b0b4-97776a52d4d1": {
+      "ProjectGuid": "7a0b1bef-b97f-47d2-b0b4-97776a52d4d1",
+      "DisplayName": "MinecraftServerInfoQuery",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}

@@ -13,7 +13,6 @@ import java.util.HashMap;
 
 
 public class MinecraftServerInfoQuery {
-
     /**
      * @param address 爪哇版服务器地址
      * @param port    爪哇版服务器端口
@@ -36,6 +35,7 @@ public class MinecraftServerInfoQuery {
             InputStream is = socket.getInputStream();
             is.read();
             is.read();
+            is.read();
             is.read();//去除头部无用字节数据
 
             int len;
@@ -46,14 +46,19 @@ public class MinecraftServerInfoQuery {
             }
 
             JSONObject data = new JSONObject(buff.toString());
-            JSONObject description = data.getJSONObject("description");
-            JSONObject players = data.getJSONObject("players");
-            JSONObject version = data.getJSONObject("version");
 
-            map.put("服务器名称", description.getString("text"));
-            map.put("服务器在线", new StringBuilder().append(players.getInt("online")).append("/").append(players.getLong("max")).toString());
-            map.put("服务器版本", version.getString("name"));
-            map.put("服务器协议", String.valueOf(version.getInt("protocol")));
+            if (data.has("description")) {
+                JSONObject description = data.getJSONObject("description");
+                JSONObject players = data.getJSONObject("players");
+                JSONObject version = data.getJSONObject("version");
+
+                map.put("服务器名称", description.getString("text"));
+                map.put("服务器在线", new StringBuilder().append(players.getInt("online")).append("/").append(players.getLong("max")).toString());
+                map.put("服务器版本", version.getString("name"));
+                map.put("服务器协议", String.valueOf(version.getInt("protocol")));
+            } else if (data.has("with")) {
+                System.out.println(data);
+            }
 
             socket.close();
         } catch (Exception e) {
@@ -62,7 +67,6 @@ public class MinecraftServerInfoQuery {
 
         return map;
     }
-
 
     /**
      * @param address 基岩版服务器地址
